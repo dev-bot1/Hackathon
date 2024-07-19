@@ -1,10 +1,12 @@
+/* General Styles */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
- 
+
+/* Landing Page Styles */
 .landing-page {
   display: flex;
   flex-direction: column;
@@ -12,36 +14,67 @@ body {
   justify-content: center;
   height: 100vh;
 }
- 
+
 .landing-page h1 {
   margin-bottom: 20px;
 }
- 
+
 .landing-page button {
   margin: 10px;
   padding: 10px 20px;
   font-size: 16px;
 }
- 
+
+/* Page Container Styles */
 .page-container {
   display: flex;
   flex-direction: column;
   height: 100vh;
 }
- 
-header, footer {
-  background-color: #f8f8f8;
+
+/* Header Styles */
+header {
+  background-color: #1976d2;
+  padding: 20px;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Footer Styles */
+footer {
+  background-color: #e0e0e0;
   padding: 10px;
   text-align: center;
 }
- 
+
+/* Sidebar (Aside) Styles */
 aside {
-  width: 200px;
-  background-color: #f0f0f0;
-  padding: 10px;
+  width: 300px;
+  background-color: #eee;
+  padding: 20px;
 }
- 
+
+/* Main Content Styles */
 main {
   flex-grow: 1;
   padding: 20px;
+  background-color: #f5f5f5;
+  overflow-y: auto;
+}
+
+/* Ride Card Styles */
+.ride-card {
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin: 15px 0;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Logout Link Styles */
+.logout-link {
+  color: #fff;
+  text-decoration: none;
 }
