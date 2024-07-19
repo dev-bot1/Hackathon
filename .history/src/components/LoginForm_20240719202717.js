@@ -97,7 +97,6 @@ const Button = styled.button`
     background-color: var(--primary-hover);
   }
 `;
-
 const LoginForm = ({ redirectPath }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -113,11 +112,11 @@ const LoginForm = ({ redirectPath }) => {
   };
 
   return (
-    <Container>
+    <FormContainer>
       <FormWrapper>
         <Title>Sign in to your account</Title>
         <Subtitle>
-          Or <a href="#" className="font-medium text-primary hover:underline">register for a new account</a>
+          Or <a href="#">register for a new account</a>
         </Subtitle>
         <StyledForm onSubmit={handleLogin}>
           <InputWrapper>
@@ -143,7 +142,7 @@ const LoginForm = ({ redirectPath }) => {
           <Button type="submit">Sign in</Button>
         </StyledForm>
       </FormWrapper>
-    </Container>
+    </FormContainer>
   );
 };
 

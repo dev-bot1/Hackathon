@@ -97,7 +97,6 @@ const Button = styled.button`
     background-color: var(--primary-hover);
   }
 `;
-
 const LoginForm = ({ redirectPath }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -145,6 +144,5 @@ const LoginForm = ({ redirectPath }) => {
       </FormWrapper>
     </Container>
   );
-};
-
+  
 export default LoginForm;

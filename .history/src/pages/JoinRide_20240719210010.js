@@ -37,10 +37,10 @@ const JoinRide = () => {
   const [bestMatchPercentage, setBestMatchPercentage] = useState(null);
   const [rideType, setRideType] = useState('');
   const [officeLocations] = useState([
-    { name: 'DELL 4, BLR', coords: [12.952915533494908, 77.64148461409742] },
-    { name: 'DELL 8, BLR', coords: [12.947472872035444, 77.6456967014271] },
-    { name: 'DELL 10, BLR', coords: [12.950038379443559, 77.64401401177727] },
-    { name: 'DELL 6, BLR', coords: [12.982154204009614, 77.69380009929367] },
+    { name: 'DELL 4, BLR', coords: [12.123, 77.456] },
+    { name: 'DELL 8, BLR', coords: [12.234, 77.567] },
+    { name: 'DELL 6, BLR', coords: [12.345, 77.678] },
+    { name: 'DELL 10, BLR', coords: [12.456, 77.789] },
   ]);
 
   useEffect(() => {
@@ -236,35 +236,35 @@ const JoinRide = () => {
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>{!rideType ? "Select Ride Type" : "Add Passenger Details"}</DialogTitle>
         <DialogContent>
-            {!rideType ? (
-              <>
-                <Button onClick={() => handleRideTypeSelect('home')}>Ride to Home</Button>
-                <Button onClick={() => handleRideTypeSelect('office')}>Ride to Office</Button>
-              </>
-            ) : (
-              <>
-                <TextField
-                  autoFocus
-                  margin="dense"
-                  name="name"
-                  label="Name"
-                  type="text"
-                  fullWidth
-                  variant="outlined"
-                  value={formData.name}
-                  onChange={handleChange}
-                />
-                <TextField
-                  margin="dense"
-                  name="mobile"
-                  label="Mobile Number"
-                  type="text"
-                  fullWidth
-                  variant="outlined"
-                  value={formData.mobile}
-                  onChange={handleChange}
-                />
-                {rideType === 'home' ? (
+          {!rideType ? (
+            <>
+              <Button onClick={() => handleRideTypeSelect('home')}>Ride to Home</Button>
+              <Button onClick={() => handleRideTypeSelect('office')}>Ride to Office</Button>
+            </>
+          ) : (
+            <>
+              <TextField
+                autoFocus
+                margin="dense"
+                name="name"
+                label="Name"
+                type="text"
+                fullWidth
+                variant="outlined"
+                value={formData.name}
+                onChange={handleChange}
+              />
+              <TextField
+                margin="dense"
+                name="mobile"
+                label="Mobile Number"
+                type="text"
+                fullWidth
+                variant="outlined"
+                value={formData.mobile}
+                onChange={handleChange}
+              />
+              {rideType === 'home' ? (
                 <TextField
                   select
                   margin="dense"
@@ -273,7 +273,7 @@ const JoinRide = () => {
                   fullWidth
                   variant="outlined"
                   value={startAddress}
-                  onChange={(e) => handleLocationSelect(officeLocations.find(loc => loc.name === e.target.value), 'start')}
+                  onChange={(e) => handleLocationSelect(officeLocations.find(loc => loc.name === e.target.value))}
                 >
                   {officeLocations.map((option) => (
                     <MenuItem key={option.name} value={option.name}>
@@ -290,7 +290,7 @@ const JoinRide = () => {
                   fullWidth
                   variant="outlined"
                   value={endAddress}
-                  onChange={(e) => handleLocationSelect(officeLocations.find(loc => loc.name === e.target.value), 'end')}
+                  onChange={(e) => handleLocationSelect(officeLocations.find(loc => loc.name === e.target.value))}
                 >
                   {officeLocations.map((option) => (
                     <MenuItem key={option.name} value={option.name}>
@@ -299,12 +299,12 @@ const JoinRide = () => {
                   ))}
                 </TextField>
               )}
-                <div style={{ height: "300px", marginTop: "20px" }}>
-                  <MapContainer
-                    center={defaultPosition}
-                    zoom={13}
-                    style={{ height: "100%", width: "100%" }}
-                  >
+              <div style={{ height: "300px", marginTop: "20px" }}>
+                <MapContainer
+                  center={defaultPosition}
+                  zoom={13}
+                  style={{ height: "100%", width: "100%" }}
+                >
                   <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -312,7 +312,8 @@ const JoinRide = () => {
                   <Marker
                     position={startCoords}
                     icon={L.icon({
-                      iconUrl: "https://leafletjs.com/examples/custom-icons/leaf-red.png",
+                      iconUrl:
+                        "https://leafletjs.com/examples/custom-icons/leaf-red.png",
                       iconSize: [25, 41],
                       iconAnchor: [12, 41],
                       popupAnchor: [1, -34],
@@ -322,14 +323,15 @@ const JoinRide = () => {
                     <Marker
                       position={endCoords}
                       icon={L.icon({
-                        iconUrl: "https://leafletjs.com/examples/custom-icons/leaf-green.png",
+                        iconUrl:
+                          "https://leafletjs.com/examples/custom-icons/leaf-green.png",
                         iconSize: [25, 41],
                         iconAnchor: [12, 41],
                         popupAnchor: [1, -34],
                       })}
                     ></Marker>
                   )}
-                  <LocationMarker setCoords={rideType === 'home' ? setEndCoords : setStartCoords} />
+                  <LocationMarker setCoords={setEndCoords} />
                 </MapContainer>
               </div>
             </>

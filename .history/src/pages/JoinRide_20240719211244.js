@@ -265,40 +265,44 @@ const JoinRide = () => {
                   onChange={handleChange}
                 />
                 {rideType === 'home' ? (
+                  <TextField
+                    select
+                    margin="dense"
+                    name="startLocation"
+                    label="Start Location"
+                    fullWidth
+                    variant="outlined"
+                    value={startAddress}
+                    onChange={(e) => handleLocationSelect(officeLocations.find(loc => loc.name === e.target.value))}
+                  >
+                    {officeLocations.map((option) => (
+                      <MenuItem key={option.name} value={option.name}>
+                        {option.name}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                ) : (
+                  <TextField
+                    margin="dense"
+                    name="startLocation"
+                    label="Start Location"
+                    type="text"
+                    fullWidth
+                    variant="outlined"
+                    value={startAddress}
+                    onChange={handleChange}
+                  />
+                )}
                 <TextField
-                  select
-                  margin="dense"
-                  name="startLocation"
-                  label="Start Location"
-                  fullWidth
-                  variant="outlined"
-                  value={startAddress}
-                  onChange={(e) => handleLocationSelect(officeLocations.find(loc => loc.name === e.target.value), 'start')}
-                >
-                  {officeLocations.map((option) => (
-                    <MenuItem key={option.name} value={option.name}>
-                      {option.name}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              ) : (
-                <TextField
-                  select
                   margin="dense"
                   name="endLocation"
                   label="End Location"
+                  type="text"
                   fullWidth
                   variant="outlined"
                   value={endAddress}
-                  onChange={(e) => handleLocationSelect(officeLocations.find(loc => loc.name === e.target.value), 'end')}
-                >
-                  {officeLocations.map((option) => (
-                    <MenuItem key={option.name} value={option.name}>
-                      {option.name}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              )}
+                  onChange={handleChange}
+                />
                 <div style={{ height: "300px", marginTop: "20px" }}>
                   <MapContainer
                     center={defaultPosition}

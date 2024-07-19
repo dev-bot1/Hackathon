@@ -9,7 +9,6 @@ import {
   DialogContent,
   DialogTitle,
   TextField,
-  MenuItem,
 } from "@mui/material";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
@@ -17,7 +16,7 @@ import { GeoSearchControl, OpenStreetMapProvider } from "leaflet-geosearch";
 import "leaflet-geosearch/dist/geosearch.css";
 import L from "leaflet";
 import axios from "axios";
-import * as turf from "@turf/turf";
+import * as turf from "@turf/turf"; // Importing everything from Turf
 
 const defaultPosition = [12.947504240944422, 77.64564305720091];
 
@@ -35,13 +34,6 @@ const JoinRide = () => {
   const [startAddress, setStartAddress] = useState("");
   const [endAddress, setEndAddress] = useState("");
   const [bestMatchPercentage, setBestMatchPercentage] = useState(null);
-  const [rideType, setRideType] = useState('');
-  const [officeLocations] = useState([
-    { name: 'DELL 4, BLR', coords: [12.952915533494908, 77.64148461409742] },
-    { name: 'DELL 8, BLR', coords: [12.947472872035444, 77.6456967014271] },
-    { name: 'DELL 10, BLR', coords: [12.950038379443559, 77.64401401177727] },
-    { name: 'DELL 6, BLR', coords: [12.982154204009614, 77.69380009929367] },
-  ]);
 
   useEffect(() => {
     const fetchAddresses = async () => {
@@ -71,12 +63,10 @@ const JoinRide = () => {
 
   const handleClickOpen = () => {
     setOpen(true);
-    setRideType('');
   };
 
   const handleClose = () => {
     setOpen(false);
-    setRideType('');
   };
 
   const handleSave = () => {
@@ -89,20 +79,6 @@ const JoinRide = () => {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleRideTypeSelect = (type) => {
-    setRideType(type);
-  };
-
-  const handleLocationSelect = (location) => {
-    if (rideType === 'home') {
-      setStartCoords(location.coords);
-      setStartAddress(location.name);
-    } else {
-      setEndCoords(location.coords);
-      setEndAddress(location.name);
-    }
   };
 
   const LocationMarker = ({ setCoords }) => {
@@ -138,7 +114,7 @@ const JoinRide = () => {
         "https://api.openrouteservice.org/v2/directions/driving-car",
         {
           params: {
-            api_key: "5b3ce3597851110001cf624834d3f7d390104c81ba79a398cd0d5214",
+            api_key: "5b3ce3597851110001cf624834d3f7d390104c81ba79a398cd0d5214", // Replace with your API key
             start: `${startCoords[1]},${startCoords[0]}`,
             end: `${endCoords[1]},${endCoords[0]}`,
           },
@@ -157,7 +133,7 @@ const JoinRide = () => {
         "https://api.openrouteservice.org/v2/directions/driving-car",
         {
           params: {
-            api_key: "5b3ce3597851110001cf624834d3f7d390104c81ba79a398cd0d5214",
+            api_key: "5b3ce3597851110001cf624834d3f7d390104c81ba79a398cd0d5214", // Replace with your API key
             start: `${rideGiverStartCoords[1]},${rideGiverStartCoords[0]}`,
             end: `${rideGiverEndCoords[1]},${rideGiverEndCoords[0]}`,
           },
@@ -186,7 +162,7 @@ const JoinRide = () => {
   const calculateRouteMatchPercentage = (userRouteLine, routeGiverLine) => {
     const distance = turf.length(userRouteLine, { units: "kilometers" });
     console.log("Distance:", distance);
-    const overlapFeatureCollection = turf.lineOverlap(userRouteLine, routeGiverLine);
+    const overlapFeatureCollection = turf.lineOverlap(userRouteLine,         routeGiverLine);
     console.log("Overlap:", overlapFeatureCollection);
     if (overlapFeatureCollection.features.length === 0) {
       console.error("No overlap found");
@@ -204,149 +180,127 @@ const JoinRide = () => {
   };
 
   return (
-    <div className="page-container">
-      <main>
-        <Button variant="contained" color="primary" onClick={handleClickOpen}>
+<div className="page-container">
+<main>
+<Button variant="contained" color="primary" onClick={handleClickOpen}>
           Add me as a passenger
-        </Button>
-        <Button
+</Button>
+<Button
           variant="contained"
           color="secondary"
           onClick={compareRoutes}
           disabled={savedRides.length === 0}
-        >
+>
           Find Me a Ride
-        </Button>
+</Button>
         {bestMatchPercentage !== null && (
-          <div className="match-percentage">
+<div className="match-percentage">
             {bestMatchPercentage}% Match with available routes
-          </div>
+</div>
         )}
         {savedRides.map((ride, index) => (
-          <div key={index} className="ride-card">
-            <h3>{ride.name}</h3>
-            <p>Mobile: {ride.mobile}</p>
-            <p>Start Location: {ride.startAddress}</p>
-            <p>End Location: {ride.endAddress}</p>
-          </div>
+<div key={index} className="ride-card">
+<h3>{ride.name}</h3>
+<p>Mobile: {ride.mobile}</p>
+<p>Start Location: {ride.startAddress}</p>
+<p>End Location: {ride.endAddress}</p>
+</div>
         ))}
-      </main>
-      <Footer />
+</main>
+<Footer />
 
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>{!rideType ? "Select Ride Type" : "Add Passenger Details"}</DialogTitle>
-        <DialogContent>
-            {!rideType ? (
-              <>
-                <Button onClick={() => handleRideTypeSelect('home')}>Ride to Home</Button>
-                <Button onClick={() => handleRideTypeSelect('office')}>Ride to Office</Button>
-              </>
-            ) : (
-              <>
-                <TextField
-                  autoFocus
-                  margin="dense"
-                  name="name"
-                  label="Name"
-                  type="text"
-                  fullWidth
-                  variant="outlined"
-                  value={formData.name}
-                  onChange={handleChange}
-                />
-                <TextField
-                  margin="dense"
-                  name="mobile"
-                  label="Mobile Number"
-                  type="text"
-                  fullWidth
-                  variant="outlined"
-                  value={formData.mobile}
-                  onChange={handleChange}
-                />
-                {rideType === 'home' ? (
-                <TextField
-                  select
-                  margin="dense"
-                  name="startLocation"
-                  label="Start Location"
-                  fullWidth
-                  variant="outlined"
-                  value={startAddress}
-                  onChange={(e) => handleLocationSelect(officeLocations.find(loc => loc.name === e.target.value), 'start')}
-                >
-                  {officeLocations.map((option) => (
-                    <MenuItem key={option.name} value={option.name}>
-                      {option.name}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              ) : (
-                <TextField
-                  select
-                  margin="dense"
-                  name="endLocation"
-                  label="End Location"
-                  fullWidth
-                  variant="outlined"
-                  value={endAddress}
-                  onChange={(e) => handleLocationSelect(officeLocations.find(loc => loc.name === e.target.value), 'end')}
-                >
-                  {officeLocations.map((option) => (
-                    <MenuItem key={option.name} value={option.name}>
-                      {option.name}
-                    </MenuItem>
-                  ))}
-                </TextField>
+<DialogTitle>Add Passenger Details</DialogTitle>
+<DialogContent>
+<TextField
+            autoFocus
+            margin="dense"
+            name="name"
+            label="Name"
+            type="text"
+            fullWidth
+            variant="outlined"
+            value={formData.name}
+            onChange={handleChange}
+          />
+<TextField
+            margin="dense"
+            name="mobile"
+            label="Mobile Number"
+            type="text"
+            fullWidth
+            variant="outlined"
+            value={formData.mobile}
+            onChange={handleChange}
+          />
+<TextField
+            margin="dense"
+            name="startLocation"
+            label="Start Location"
+            type="text"
+            fullWidth
+            variant="outlined"
+            value={startAddress}
+            onChange={handleChange}
+            disabled
+          />
+<TextField
+            margin="dense"
+            name="endLocation"
+            label="End Location"
+            type="text"
+            fullWidth
+            variant="outlined"
+            value={endAddress}
+            onChange={handleChange}
+            disabled
+          />
+<div style={{ height: "300px", marginTop: "20px" }}>
+<MapContainer
+              center={defaultPosition}
+              zoom={13}
+              style={{ height: "100%", width: "100%" }}
+>
+<TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              />
+<Marker
+                position={startCoords}
+                icon={L.icon({
+                  iconUrl:
+                    "https://leafletjs.com/examples/custom-icons/leaf-red.png",
+                  iconSize: [25, 41],
+                  iconAnchor: [12, 41],
+                  popupAnchor: [1, -34],
+                })}
+></Marker>
+              {endCoords.length > 0 && (
+<Marker
+                  position={endCoords}
+                  icon={L.icon({
+                    iconUrl:
+                      "https://leafletjs.com/examples/custom-icons/leaf-green.png",
+                    iconSize: [25, 41],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [1, -34],
+                  })}
+></Marker>
               )}
-                <div style={{ height: "300px", marginTop: "20px" }}>
-                  <MapContainer
-                    center={defaultPosition}
-                    zoom={13}
-                    style={{ height: "100%", width: "100%" }}
-                  >
-                  <TileLayer
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                  />
-                  <Marker
-                    position={startCoords}
-                    icon={L.icon({
-                      iconUrl: "https://leafletjs.com/examples/custom-icons/leaf-red.png",
-                      iconSize: [25, 41],
-                      iconAnchor: [12, 41],
-                      popupAnchor: [1, -34],
-                    })}
-                  ></Marker>
-                  {endCoords.length > 0 && (
-                    <Marker
-                      position={endCoords}
-                      icon={L.icon({
-                        iconUrl: "https://leafletjs.com/examples/custom-icons/leaf-green.png",
-                        iconSize: [25, 41],
-                        iconAnchor: [12, 41],
-                        popupAnchor: [1, -34],
-                      })}
-                    ></Marker>
-                  )}
-                  <LocationMarker setCoords={rideType === 'home' ? setEndCoords : setStartCoords} />
-                </MapContainer>
-              </div>
-            </>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
+<LocationMarker setCoords={setEndCoords} />
+</MapContainer>
+</div>
+</DialogContent>
+<DialogActions>
+<Button onClick={handleClose} color="primary">
             Cancel
-          </Button>
-          {rideType && (
-            <Button onClick={handleSave} color="primary">
-              Save
-            </Button>
-          )}
-        </DialogActions>
-      </Dialog>
-    </div>
+</Button>
+<Button onClick={handleSave} color="primary">
+            Save
+</Button>
+</DialogActions>
+</Dialog>
+</div>
   );
 };
 
